@@ -4,6 +4,9 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { EmployeesModule } from './employees/employees.module';
+import { Employee } from './employees/entities/employee.entity';
+import { LoginModule } from './login/login.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -15,10 +18,12 @@ import { EmployeesModule } from './employees/employees.module';
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
       database: 'sql_hr',
-      entities: [],
+      entities: [Employee],
       synchronize: false,
     }),
     EmployeesModule,
+    LoginModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

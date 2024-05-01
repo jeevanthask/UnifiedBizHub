@@ -1,20 +1,30 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { EmployeesService } from './employees.service';
-import { CreateEmployeeDto } from './dto/create-employee.dto';
-import { UpdateEmployeeDto } from './dto/update-employee.dto';
+import { EmployeeDto } from './dto/employee.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('employees')
 export class EmployeesController {
   constructor(private readonly employeesService: EmployeesService) {}
 
   @Post()
-  create(@Body() createEmployeeDto: CreateEmployeeDto) {
+  create(@Body() createEmployeeDto: EmployeeDto) {
     return this.employeesService.create(createEmployeeDto);
   }
 
+  @UseGuards(AuthGuard)
   @Get()
-  findAll() {
-    return this.employeesService.findAll();
+  async findAll(): Promise<EmployeeDto[]> {
+    return await this.employeesService.findAll();
   }
 
   @Get(':id')
@@ -23,7 +33,7 @@ export class EmployeesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEmployeeDto: UpdateEmployeeDto) {
+  update(@Param('id') id: string, @Body() updateEmployeeDto: any) {
     return this.employeesService.update(+id, updateEmployeeDto);
   }
 
